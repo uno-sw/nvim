@@ -15,6 +15,7 @@ return {
           "ts_ls",
           "pyright",
           "lua_ls",
+          "clangd",
         },
       })
     end,
@@ -36,6 +37,10 @@ return {
       })
 
       vim.lsp.config("pyright", {
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config("clangd", {
         capabilities = capabilities,
       })
 
