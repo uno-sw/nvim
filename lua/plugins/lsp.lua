@@ -42,6 +42,7 @@ return {
 
       vim.lsp.config("clangd", {
         capabilities = capabilities,
+        cmd = { "clangd", "--header-insertion=never" },
       })
 
       vim.lsp.config("lua_ls", {

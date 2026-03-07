@@ -3,10 +3,11 @@ return {
   lazy = false,
   build = ':TSUpdate',
   config = function()
-    require('nvim-treesitter.configs').setup({
-      ensure_installed = { 'c' },
-      highlight = { enable = true },
-    })
+    require('nvim-treesitter').install {
+      'c',
+      'dart',
+      'lua',
+    }
   end,
 }
 
