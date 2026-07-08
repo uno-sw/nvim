@@ -2,6 +2,8 @@ require('options')
 require('keymaps')
 require('config.lazy')
 
+vim.g.sync_macos_appearance()
+
 local augroup = vim.api.nvim_create_augroup('WezTermPadding', { clear = true })
 
 vim.api.nvim_create_autocmd({ 'VimEnter', 'FocusGained'}, {
@@ -17,4 +19,3 @@ vim.api.nvim_create_autocmd({ 'VimLeave', 'FocusLost'}, {
     io.write('\x1b]1337;SetUserVar=NVIM_FOCUSED=MA==\x07')
   end,
 })
-

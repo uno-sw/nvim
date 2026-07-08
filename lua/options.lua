@@ -10,16 +10,28 @@ vim.diagnostic.config({
   float = { border = "rounded" },
 })
 
-local function sync_background()
+local function sync_background(apply_colorscheme)
   local result = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null")
-  vim.o.background = result:find("Dark") and "dark" or "light"
-  if vim.g.colors_name == "catppuccin" then
+  local is_dark = result:find("Dark") ~= nil
+  vim.o.background = is_dark and "dark" or "light"
+
+  if not apply_colorscheme then
+    return
+  end
+
+  if is_dark then
+    vim.cmd.colorscheme("tokyonight")
+  else
     vim.cmd.colorscheme("catppuccin")
   end
 end
 
-sync_background()
+sync_background(false)
+
+vim.g.sync_macos_appearance = function()
+  sync_background(true)
+end
 
 vim.api.nvim_create_autocmd("FocusGained", {
-  callback = sync_background,
+  callback = vim.g.sync_macos_appearance,
 })
