@@ -2,6 +2,10 @@ require('options')
 require('keymaps')
 require('config.lazy')
 
+if vim.g.neovide then
+  require('neovide')
+end
+
 vim.g.sync_macos_appearance()
 
 local augroup = vim.api.nvim_create_augroup('WezTermPadding', { clear = true })

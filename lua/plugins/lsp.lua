@@ -2,7 +2,12 @@ return {
   {
     "williamboman/mason.nvim",
     config = function()
-      require("mason").setup()
+      require("mason").setup({
+        registries = {
+          "github:mason-org/mason-registry",
+          "github:Crashdummy/mason-registry",
+        },
+      })
     end,
   },
 
@@ -13,8 +18,10 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "clangd",
+          "gopls",
           "lua_ls",
           "pyright",
+          "rust_analyzer",
           "ts_ls",
         },
       })
@@ -29,11 +36,15 @@ return {
     },
     config = function()
       local capabilities =
-        require("cmp_nvim_lsp").default_capabilities()
+          require("cmp_nvim_lsp").default_capabilities()
 
       vim.lsp.config("clangd", {
         capabilities = capabilities,
         cmd = { "clangd", "--header-insertion=never" },
+      })
+
+      vim.lsp.config("gopls", {
+        capabilities = capabilities,
       })
 
       vim.lsp.config("lua_ls", {
@@ -42,24 +53,28 @@ return {
           Lua = {
             runtime = {
               version = "LuaJIT",
-	          },
+            },
             diagnostics = {
               globals = { "vim" },
             },
-	          workspace = {
+            workspace = {
               library = {
                 vim.env.VIMRUNTIME,
-	            },
-	            checkThirdParty = false,
-	          },
-	          telemetry = {
+              },
+              checkThirdParty = false,
+            },
+            telemetry = {
               enable = false,
-	          },
+            },
           },
         },
       })
 
       vim.lsp.config("pyright", {
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config("rust-analyzer", {
         capabilities = capabilities,
       })
 
@@ -83,8 +98,8 @@ return {
         --    `mise which dart` が実体パスを返す (未設定だと非ゼロ終了)。
         if vim.fn.executable("mise") == 1 then
           local r = vim
-            .system({ "mise", "which", "dart" }, { cwd = root, text = true })
-            :wait(2000)
+              .system({ "mise", "which", "dart" }, { cwd = root, text = true })
+              :wait(2000)
           if r.code == 0 then
             local p = vim.trim(r.stdout or "")
             if p ~= "" and vim.uv.fs_stat(p) then
@@ -117,7 +132,7 @@ return {
         pattern = "dart",
         callback = function(ev)
           local root = vim.fs.root(ev.buf, { ".fvm", "pubspec.yaml", ".git" })
-            or vim.fn.getcwd()
+              or vim.fn.getcwd()
           local dart = resolve_dart_exe(root)
           -- 同一 name + root_dir なら既存クライアントに再アタッチされる。
           vim.lsp.start({
@@ -143,5 +158,11 @@ return {
       require("lsp_signature").setup()
     end,
   },
+  {
+    "seblyng/roslyn.nvim",
+    ft = "cs",
+    opts = {
+      capabilities = require("cmp_nvim_lsp").default_capabilities(),
+    },
+  },
 }
-

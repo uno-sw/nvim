@@ -20,9 +20,9 @@ local function sync_background(apply_colorscheme)
   end
 
   if is_dark then
-    vim.cmd.colorscheme("tokyonight")
+    vim.cmd.colorscheme("tokyonight-night")
   else
-    vim.cmd.colorscheme("catppuccin")
+    vim.cmd.colorscheme("tokyonight-day")
   end
 end
 
