@@ -5,7 +5,6 @@ return {
       require("mason").setup({
         registries = {
           "github:mason-org/mason-registry",
-          "github:Crashdummy/mason-registry",
         },
       })
     end,
@@ -15,15 +14,31 @@ return {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     config = function()
+      local servers = {
+        "clangd",
+        "gopls",
+        "intelephense",
+        "lua_ls",
+        "pyright",
+        "rust_analyzer",
+        "svelte",
+        "ts_ls",
+      }
+
+      -- 環境によって mason で導入できない language server を NVIM_MASON_SKIP で除外する。
+      -- 例: 開発コンテナには Go ツールチェインが無く、clangd は linux/arm64 向けの
+      -- 事前ビルドバイナリが提供されていない。
+      local skip = {}
+      for _, name in
+      ipairs(vim.split(vim.env.NVIM_MASON_SKIP or "", ",", { trimempty = true }))
+      do
+        skip[vim.trim(name)] = true
+      end
+
       require("mason-lspconfig").setup({
-        ensure_installed = {
-          "clangd",
-          "gopls",
-          "lua_ls",
-          "pyright",
-          "rust_analyzer",
-          "ts_ls",
-        },
+        ensure_installed = vim.tbl_filter(function(name)
+          return not skip[name]
+        end, servers),
       })
     end,
   },
@@ -45,6 +60,14 @@ return {
 
       vim.lsp.config("gopls", {
         capabilities = capabilities,
+      })
+
+      vim.lsp.config("intelephense", {
+        capabilities = capabilities,
+        -- lspconfig の既定は { ".git", "composer.json" } で .git が優先されるため、
+        -- Laravel がサブディレクトリにある構成だとリポジトリルートが root_dir になり
+        -- 無関係な PHP まで走査される。composer.json のある階層を優先する。
+        root_markers = { { "composer.json" }, ".git" },
       })
 
       vim.lsp.config("lua_ls", {
@@ -75,6 +98,10 @@ return {
       })
 
       vim.lsp.config("rust-analyzer", {
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config("svelte", {
         capabilities = capabilities,
       })
 

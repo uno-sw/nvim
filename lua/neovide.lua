@@ -1,1 +1,1 @@
-vim.o.guifont = "Moralerspace Krypton:h13"
+vim.o.guifont = "Annotation Mono,Moralerspace Krypton:h13"

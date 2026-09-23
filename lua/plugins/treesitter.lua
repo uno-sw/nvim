@@ -6,8 +6,9 @@ return {
     require('nvim-treesitter').install {
       'c',
       'dart',
+      'javascript',
       'lua',
+      'typescript',
     }
   end,
 }
-
