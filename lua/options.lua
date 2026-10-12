@@ -11,35 +11,35 @@ vim.diagnostic.config({
   float = { border = "rounded" },
 })
 
-vim.o.background = "dark"
-vim.cmd.colorscheme("catppuccin")
 -- Change these two values to switch which themes are used for each appearance.
--- local themes = {
---   light = "catppuccin-latte",
---   dark = "tokyonight-storm",
--- }
---
--- local function sync_background(apply_colorscheme)
---   local result = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null")
---   local is_dark = result:find("Dark") ~= nil
---
---   if is_dark then
---     vim.o.background = "dark"
---   else
---     vim.o.background = "light"
---   end
---
---   if apply_colorscheme then
---     vim.cmd.colorscheme(is_dark and themes.dark or themes.light)
---   end
--- end
---
--- sync_background(false)
---
--- vim.g.sync_macos_appearance = function()
---   sync_background(true)
--- end
---
--- vim.api.nvim_create_autocmd("FocusGained", {
---   callback = vim.g.sync_macos_appearance,
--- })
+local themes = {
+  light = "catppuccin-latte",
+  dark = "tokyonight-storm",
+}
+
+local function sync_background(apply_colorscheme)
+  local result = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null")
+  local is_dark = result:find("Dark") ~= nil
+
+  if is_dark then
+    vim.o.background = "dark"
+  else
+    vim.o.background = "light"
+  end
+
+  if apply_colorscheme then
+    vim.cmd.colorscheme(is_dark and themes.dark or themes.light)
+  end
+end
+
+sync_background(false)
+
+vim.g.sync_macos_appearance = function()
+  sync_background(true)
+end
+
+vim.api.nvim_create_autocmd("FocusGained", {
+  -- Allow bufferline and other plugins to handle the colorscheme change.
+  nested = true,
+  callback = vim.g.sync_macos_appearance,
+})
