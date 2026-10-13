@@ -156,8 +156,12 @@ return {
       end
 
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = "dart",
+        pattern = { "dart", "yaml" },
         callback = function(ev)
+          if vim.bo[ev.buf].filetype == "yaml"
+              and vim.fs.basename(vim.api.nvim_buf_get_name(ev.buf)) ~= "pubspec.yaml" then
+            return
+          end
           local root = vim.fs.root(ev.buf, { ".fvm", "pubspec.yaml", ".git" })
               or vim.fn.getcwd()
           local dart = resolve_dart_exe(root)
