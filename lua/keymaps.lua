@@ -19,4 +19,8 @@ vim.keymap.set("n", "<leader>fh", telescope.help_tags)
 -- Bufferline
 vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>")
 vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>")
+vim.keymap.set("n", "<leader>gb", "<Cmd>BufferLinePick<CR>")
+vim.keymap.set("n", "<leader>gD", "<Cmd>BufferLinePickClose<CR>")
+
+-- Nvim Tree
 vim.keymap.set("n", "<leader>e", "<Cmd>NvimTreeToggle<CR>")

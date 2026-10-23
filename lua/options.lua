@@ -13,8 +13,8 @@ vim.diagnostic.config({
 
 -- Change these two values to switch which themes are used for each appearance.
 local themes = {
-  light = "catppuccin-latte",
-  dark = "tokyonight-storm",
+  light = "kanagawa-lotus",
+  dark = "catppuccin-frappe",
 }
 
 local function sync_background(apply_colorscheme)
